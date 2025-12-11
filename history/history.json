@@ -1,0 +1,99 @@
+[
+  {
+    "time": "20:12",
+    "hour": 20,
+    "timestamp": "2025-12-11 20:12:39",
+    "region": "HN",
+    "action": [
+      0.9901462197303772,
+      1.5438741396422984e-09,
+      0.44500046968460083,
+      3.883266617776826e-05,
+      0.9841311573982239
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.9901462197303772,
+      "uOA": 1.5438741396422984e-09,
+      "uChiller": 0.44500046968460083,
+      "uHeater": 3.883266617776826e-05,
+      "uFanEA": 0.9841311573982239
+    },
+    "weather": {
+      "temperature_c": 22.2,
+      "humidity_percent": 73.0,
+      "wind_kph": 4.0,
+      "pressure_mb": 1018.0,
+      "location": "HVAC Vietnam Co., Xuan Phuong, Nam Tu Liem, Hanoi",
+      "local_time": "2025-12-11 20:12"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        301.22635426358886,
+        0.5943636450460184,
+        561.1223193264855,
+        292.44428210741404,
+        292.08591575636694,
+        0.876195897472851,
+        0.18,
+        743.6666763655178,
+        296.925,
+        0.7675,
+        0.7916666666666666,
+        0.8571428571428571,
+        0.3,
+        0.5801019072532654
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 301.22635426358886,
+        "RH_zone_ratio": 0.5943636450460184,
+        "RH_zone_percent": 59.43636450460183,
+        "CO2_zone_ppm": 561.1223193264855,
+        "P_total_W": 743.6666763655178
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 29.250178875174697,
+        "RH_zone": 69.85312645458498,
+        "CO2_zone": 592.4304024251009,
+        "P_total": 0.899171454287422
+      },
+      "action_init": {
+        "uFan": 0.45,
+        "uOA": 0.4,
+        "uChiller": 0.6,
+        "uHeater": 0.35,
+        "uFanEA": 0.3
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 8303.2,
+      "timestamp_generated": "2025-12-11T20:12:38.955840"
+    }
+  }
+]

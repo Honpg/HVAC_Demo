@@ -1,0 +1,712 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* ==================== CRITICAL: Override Streamlit Default Styles ==================== */
+/* Force our styles to take precedence over Streamlit defaults */
+[data-testid="stAppViewContainer"] * {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-main: #F4F7FB;
+    --card-bg: #FFFFFF;
+    --border-soft: rgba(0, 102, 204, 0.15);
+    --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.06);
+    --blue-1: #0066CC;
+    --blue-2: #00C2FF;
+    --blue-3: #00C2FF;
+    --blue-4: #1E90FF;
+    --text-main: #1F2933;
+    --text-muted: #7C8AA5;
+}
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+html, body, [data-testid="stAppViewContainer"], .main {
+    font-family: 'Inter', sans-serif !important;
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
+}
+
+/* Override Streamlit default element styles */
+[data-testid="stAppViewContainer"] .element-container,
+[data-testid="stAppViewContainer"] .stMarkdown,
+[data-testid="stAppViewContainer"] [class*="st"] {
+    font-family: 'Inter', sans-serif !important;
+}
+
+[data-testid="stAppViewContainer"] > .main {
+    padding-top: 0 !important;
+}
+
+code, .mono { font-family: 'JetBrains Mono', monospace !important; }
+
+h1, h2, h3, h4, h5, h6, p, label, button, input, textarea {
+    font-family: 'Inter', sans-serif;
+}
+
+.block-container {
+    padding: 0 2.25rem 1.25rem 2.25rem !important;
+    max-width: 1600px !important;
+}
+
+#MainMenu, footer, header, [data-testid="stHeader"], .stDeployButton {
+    display: none !important;
+}
+
+[data-testid="stHorizontalBlock"] {
+    align-items: stretch;
+    gap: 16px !important;
+}
+
+[data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Specific fix for control panel buttons alignment */
+.panel-card--compact [data-testid="stHorizontalBlock"]:first-of-type {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] > div {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+/* Reduce vertical spacing between elements in the middle column (System Status) */
+[data-testid="stHorizontalBlock"] > [data-testid="stColumn"]:nth-child(2) [data-testid="stVerticalBlock"] {
+    gap: 6px !important;
+}
+/* Fallback: if structure differs, reduce global row gap modestly */
+[data-testid="stVerticalBlock"] { row-gap: 8px; }
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0 0.5rem 0;
+    margin-bottom: 0.5rem;
+}
+
+.header-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--blue-2), var(--blue-4));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.header-icon {
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background: none !important;
+    color: #f59e0b !important; /* Màu vàng/cam cho icon factory */
+    display: inline-block;
+    font-size: 1.4rem !important;
+    line-height: 1;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    background-color: #E1E8F4;
+    padding: 4px;
+    border-radius: 999px;
+    border: none;
+    gap: 4px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    height: 32px;
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0 18px;
+    border: none;
+    background: transparent;
+    flex: 1 1 0;
+    justify-content: center;
+    transition: all 0.15s ease-out;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.10);
+    background: rgba(255,255,255,0.9);
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, var(--blue-2), var(--blue-4)) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(0, 102, 204, 0.35);
+}
+
+.panel-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 2px 10px 4px 10px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+.panel-card--system { padding-bottom: 8px; }
+.panel-card--compact {
+    padding: 6px 12px 8px 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    background: var(--card-bg) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Reset all internal spacing to ensure alignment */
+.panel-card--compact > *:first-child {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    margin-top: 0 !important;
+}
+
+.panel-header-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 1rem 0 !important;
+    padding: 0 0 0.75rem 0 !important;
+    border-bottom: 2px solid rgba(0, 194, 255, 0.15);
+    width: 100% !important;
+    flex-shrink: 0;
+    box-sizing: border-box !important;
+}
+
+.panel-header-control .panel-icon {
+    font-size: 1.2rem;
+    color: var(--blue-4);
+    animation: float 3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.panel-header-control .panel-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #1E90FF, #00C2FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.3px;
+    flex: 1;
+}
+
+/* ==================== RL Control Center: Buttons Container ==================== */
+.panel-card--compact .control-buttons {
+    margin-top: 0.6rem !important;
+    width: 100% !important;
+}
+
+.panel-card--compact .control-buttons [data-testid="stHorizontalBlock"] {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 0.6rem !important;
+}
+
+.panel-card--compact .control-buttons [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.panel-card--compact .control-buttons [data-testid="stButton"] {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Fix for markdown container that wraps header */
+.panel-card--compact > [data-testid="stMarkdownContainer"]:first-child {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+/* Ensure all direct children of panel-card align */
+.panel-card--compact > * {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* ==================== RL Control Center: Internal Spacing ==================== */
+/* Reset Streamlit default margins/paddings */
+.panel-card--compact [data-testid="stMarkdownContainer"] {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.panel-card--compact [data-testid="stMarkdownContainer"]:first-child {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Spacing for slider/info after buttons */
+.panel-card--compact [data-testid="stSlider"],
+.panel-card--compact [data-testid="stInfo"] {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+}
+
+/* Override Streamlit slider default styles */
+.panel-card--compact [data-testid="stSlider"] .stSlider > div {
+    margin-top: 0.5rem !important;
+}
+
+.panel-card--compact [data-testid="stSlider"] label {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    color: var(--text-main) !important;
+}
+
+/* Reduce spacing between elements inside panel-card */
+.panel-card--compact [data-testid="stVerticalBlock"] {
+    gap: 0.5rem !important;
+    row-gap: 0.5rem !important;
+}
+
+/* Systems Control: spacing cho Realtime label và buttons */
+.panel-card--compact [data-testid="stMarkdownContainer"]:has-text("Realtime:") {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.panel-card--compact [data-testid="stMarkdownContainer"]:has-text("Realtime:") p {
+    font-size: 0.85rem !important;
+    color: var(--text-muted) !important;
+    margin: 0 !important;
+}
+.panel-card--control {
+    padding: 16px 20px 20px;
+    align-items: stretch;
+    min-height: auto;
+    height: auto;
+}
+
+.panel-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 0.4rem !important;
+    margin-top: 0 !important;
+    padding: 0 0 0.75rem 0 !important;
+    border-bottom: 2px solid rgba(0, 194, 255, 0.15) !important;
+    width: 100% !important;
+}
+
+.panel-subheader {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+/* Ensure header in compact panel has proper spacing */
+.panel-card--compact .panel-header {
+    margin-top: 0 !important;
+    margin-bottom: 0.4rem !important;
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Ensure control panel header is properly aligned */
+.panel-card--compact > [data-testid="stMarkdownContainer"]:first-child {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+/* Fix markdown container alignment */
+.panel-card--compact [data-testid="stMarkdownContainer"] {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.panel-icon {
+    font-size: 1.2rem;
+    color: var(--blue-4);
+    animation: float 3s ease-in-out infinite;
+}
+
+.panel-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #1E90FF, #00C2FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.3px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Override Streamlit button styles completely */
+[data-testid="stButton"] > button,
+.stButton > button {
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+    font-size: 0.85rem !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+button[kind="primary"] {
+    background: linear-gradient(135deg, #00C2FF 0%, #1E90FF 100%) !important;
+    box-shadow: 0 8px 20px rgba(0, 194, 255, 0.35) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 700 !important;
+}
+
+button[kind="primary"]:hover {
+    box-shadow: 0 12px 30px rgba(0, 194, 255, 0.45) !important;
+    transform: translateY(-3px) !important;
+}
+
+button[kind="primary"]:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 16px rgba(0, 194, 255, 0.35) !important;
+}
+
+button[kind="secondary"] {
+    background: rgba(0, 194, 255, 0.08) !important;
+    border: 2px solid rgba(0, 194, 255, 0.3) !important;
+    color: #00C2FF !important;
+    font-weight: 600 !important;
+}
+
+button[kind="secondary"]:hover {
+    background: rgba(0, 194, 255, 0.15) !important;
+    border-color: rgba(0, 194, 255, 0.5) !important;
+    color: #00C2FF !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(0, 194, 255, 0.15) !important;
+}
+
+button[kind="secondary"]:active {
+    transform: translateY(0px) !important;
+}
+
+/* RL Control Panel */
+.panel-card--control {
+    padding: 18px 22px 22px;
+    align-items: stretch;
+    min-height: auto;
+    height: auto;
+    background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(249,251,255,0.98) 100%);
+    border: 1px solid rgba(0, 194, 255, 0.1);
+    box-shadow: 0 16px 40px rgba(0, 102, 204, 0.12) !important;
+}
+
+.panel-card--control .stButton {
+    width: 100%;
+}
+.panel-card--control .stButton > button {
+    width: 100%;
+    padding: 14px 20px !important;
+    font-size: 0.95rem !important;
+    min-height: 44px !important;
+}
+
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 0.05rem;
+}
+
+.metric-item {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F9FBFF 100%);
+    border-radius: 10px;
+    padding: 4px 6px;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(0, 194, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.metric-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.metric-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.metric-lbl {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #FAFBFC 0%, #F4F7FB 100%);
+    border-radius: 14px;
+    border-left: 4px solid #1E90FF;
+    box-shadow: 0 10px 24px rgba(15,23,42,0.08);
+    min-height: 68px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.action-row:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(15,23,42,0.12);
+}
+
+.action-row.fan {
+    border-left-color: #3b82f6;
+    box-shadow: 0 0 0 1px rgba(30,144,255,0.2), 0 10px 24px rgba(15,23,42,0.08);
+}
+.action-row.fan:hover {
+    box-shadow: 0 0 0 1px rgba(30,144,255,0.3), 0 14px 32px rgba(30,144,255,0.2);
+}
+
+.action-row.oa {
+    border-left-color: #06b6d4;
+    box-shadow: 0 0 0 1px rgba(0,184,217,0.2), 0 10px 24px rgba(15,23,42,0.08);
+}
+.action-row.oa:hover {
+    box-shadow: 0 0 0 1px rgba(0,184,217,0.3), 0 14px 32px rgba(0,184,217,0.2);
+}
+
+.action-row.chiller {
+    border-left-color: #8b5cf6;
+    box-shadow: 0 0 0 1px rgba(126,87,194,0.2), 0 10px 24px rgba(15,23,42,0.08);
+}
+.action-row.chiller:hover {
+    box-shadow: 0 0 0 1px rgba(126,87,194,0.3), 0 14px 32px rgba(126,87,194,0.2);
+}
+
+.action-row.heater {
+    border-left-color: #f43f5e;
+    box-shadow: 0 0 0 1px rgba(255,82,82,0.2), 0 10px 24px rgba(15,23,42,0.08);
+}
+.action-row.heater:hover {
+    box-shadow: 0 0 0 1px rgba(255,82,82,0.3), 0 14px 32px rgba(255,82,82,0.2);
+}
+
+.action-row.fanea {
+    border-left-color: #64748b;
+    box-shadow: 0 0 0 1px rgba(66,165,245,0.2), 0 10px 24px rgba(15,23,42,0.08);
+}
+.action-row.fanea:hover {
+    box-shadow: 0 0 0 1px rgba(66,165,245,0.3), 0 14px 32px rgba(66,165,245,0.2);
+}
+
+.action-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 0.3px;
+}
+
+.action-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.action-val-current {
+    color: #64748b;
+}
+
+.action-val-new {
+    background: linear-gradient(135deg, #1E90FF, #00C2FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.action-values {
+    display: flex;
+    gap: 16px;
+}
+
+.action-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.action-col-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+}
+
+.js-plotly-plot .plotly .modebar {
+    display: none !important;
+}
+
+[data-testid="stExpander"] {
+    background-color: transparent !important;
+    border: none !important;
+    margin-bottom: 0.25rem;
+}
+
+[data-testid="stExpander"] summary {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    font-size: 0.8rem !important;
+    background-color: transparent !important;
+    padding: 0.5rem 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+[data-testid="stExpander"] summary:hover {
+    color: var(--text-main) !important;
+}
+
+/* Ẩn icon arrow text (keyboard_arrow_down / keyboard_arrow_right) trong expander header
+   để tránh bị hiện chữ thô do override font-family */
+[data-testid="stExpander"] summary [data-baseweb="icon"] {
+    display: none !important;
+}
+
+/* Ẩn luôn mọi node ẩn (aria-hidden) trong header expander để tránh text "keyboard_arrow_right" lộ ra */
+[data-testid="stExpander"] summary [aria-hidden="true"] {
+    display: none !important;
+}
+
+/* Ẩn marker mặc định của <summary>/<details> (nhiều browser hiển thị mũi tên hoặc text fallback) */
+[data-testid="stExpander"] summary::-webkit-details-marker {
+    display: none !important;
+}
+[data-testid="stExpander"] summary::marker {
+    display: none !important;
+}
+
+/* Ẩn mọi pseudo element có thể chèn icon trước/after summary */
+[data-testid="stExpander"] summary::before,
+[data-testid="stExpander"] summary::after {
+    content: "" !important;
+    display: none !important;
+}
+
+/* Ẩn mọi span/div/i có chứa arrow text do font Material Icons lỗi */
+[data-testid="stExpander"] summary span[class*="arrow"],
+[data-testid="stExpander"] summary div[class*="arrow"],
+[data-testid="stExpander"] summary i[class*="arrow"],
+[data-testid="stExpander"] summary span[aria-label*="arrow"],
+[data-testid="stExpander"] summary div[aria-label*="arrow"],
+[data-testid="stExpander"] summary i[aria-label*="arrow"] {
+    display: none !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+}
+
+[data-testid="stExpander"] [data-testid="stExpanderDetails"] {
+    border-top: none;
+    padding: 0.5rem 0 !important;
+}
+
+[data-testid="stVerticalBlock"] iframe[title="streamlit.components.v1.html"] {
+    margin-bottom: 0 !important;
+    display: block;
+}
+
+.ahu-zoom-wrapper {
+    margin-bottom: 0;
+}
+
+.simulation-info {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #64748b;
+    padding: 0.25rem 0;
+}
+.simulation-info--inline {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    gap: 0.25rem;
+}
+.simulation-info--realtime {
+    color: #1d4ed8;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.simulation-info span {
+    display: inline-flex;
+    align-items: center;
+}
+
+.panel-card--system [data-testid="stVerticalBlock"] {
+    gap: 6px !important;          /* khoảng cách nhẹ giữa header, IAQ, và hình */
+    row-gap: 6px !important;
+}
+.panel-card--system [data-testid="stMarkdownContainer"] {
+    margin-top: 0.1rem !important;
+    margin-bottom: 0.1rem !important;
+}
+.panel-card--system iframe[title="streamlit.components.v1.html"] {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    display: block;
+}
+.ahu-zoom-wrapper { margin-bottom: 0; }
+.iaq-section {
+    margin-top: 0;                 /* không chồng lên chữ System Status nữa */
+}
+
+.chart-divider {
+    border-top: 2px dashed rgba(100, 116, 139, 0.3); /* Nét đứt, màu xám mờ */
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+/* Căn chỉnh nút Clear History với multiselect */
+[data-testid="column"]:has(button:contains("Clear History")) {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 0.5rem;
+}
+

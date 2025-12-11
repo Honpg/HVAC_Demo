@@ -1,0 +1,186 @@
+<style>
+.ahu-zoom-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0;
+}
+.ahu-zoom-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 0.78rem;
+    color: #7C8AA5;
+}
+.ahu-zoom-toolbar button {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: #E5F3FF;
+    color: #1E90FF;
+    cursor: pointer;
+}
+.ahu-zoom-toolbar button:hover {
+    background: #D8EDFF;
+}
+.ahu-zoom-frame {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    max-height: 80vh;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 16px 40px rgba(15,23,42,0.08);
+    touch-action: none;
+}
+.ahu-zoom-inner img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center center;
+    max-width: none;
+    max-height: none;
+    will-change: transform;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.ahu-zoom-title {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    z-index: 5;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 4px 10px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.12);
+    pointer-events: none;
+}
+</style>
+
+<div class="ahu-zoom-wrapper">
+  <div class="ahu-zoom-toolbar">
+    <button onclick="window.ahuResetView && window.ahuResetView()">Reset view</button>
+  </div>
+  <div id="ahu-zoom-frame" class="ahu-zoom-frame">
+    <div class="ahu-zoom-title">HVAC</div>
+    <div class="ahu-zoom-inner">
+      <img id="ahu-zoom-img" src="data:image/png;base64,{{IMG_B64}}" alt="HVAC Schematic" />
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+    const frame = document.getElementById("ahu-zoom-frame");
+    const img = document.getElementById("ahu-zoom-img");
+    if (!frame || !img) return;
+
+    let baseScale = 1.0;
+    let scale = 1.0;
+    let minScale = 0.5;
+    const maxScale = 3.0;
+    let posX = 0;
+    let posY = 0;
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
+
+    function applyTransform() {
+        img.style.transform =
+            "translate(calc(-50% + " + posX + "px), calc(-50% + " + posY + "px)) scale(" + scale + ")";
+    }
+
+    function resetView() {
+        scale = baseScale;
+        posX = 0;
+        posY = 0;
+        applyTransform();
+    }
+
+    window.ahuResetView = resetView;
+
+    frame.addEventListener("wheel", function(e) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.1 : -0.1;
+        scale = Math.min(maxScale, Math.max(minScale, scale + delta));
+        applyTransform();
+    }, { passive: false });
+
+    frame.addEventListener("mousedown", function(e) {
+        e.preventDefault();
+        isPanning = true;
+        startX = e.clientX - posX;
+        startY = e.clientY - posY;
+    });
+
+    window.addEventListener("mousemove", function(e) {
+        if (!isPanning) return;
+        e.preventDefault();
+        posX = e.clientX - startX;
+        posY = e.clientY - startY;
+        applyTransform();
+    });
+
+    window.addEventListener("mouseup", function() {
+        isPanning = false;
+    });
+
+    frame.addEventListener("touchstart", function(e) {
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        isPanning = true;
+        const t = e.touches[0];
+        startX = t.clientX - posX;
+        startY = t.clientY - posY;
+    }, { passive: false });
+
+    frame.addEventListener("touchmove", function(e) {
+        if (!isPanning || e.touches.length !== 1) return;
+        e.preventDefault();
+        const t = e.touches[0];
+        posX = t.clientX - startX;
+        posY = t.clientY - startY;
+        applyTransform();
+    }, { passive: false });
+
+    frame.addEventListener("touchend", function() {
+        isPanning = false;
+    });
+
+    function initFitToFrame() {
+        const frameRect = frame.getBoundingClientRect();
+        const imgNaturalWidth = img.naturalWidth || frameRect.width;
+        const imgNaturalHeight = img.naturalHeight || frameRect.height;
+
+        if (imgNaturalWidth > 0 && imgNaturalHeight > 0) {
+            const scaleX = frameRect.width / imgNaturalWidth;
+            const scaleY = frameRect.height / imgNaturalHeight;
+            baseScale = Math.min(scaleX, scaleY);
+            minScale = baseScale * 0.5;
+        } else {
+            baseScale = 1.0;
+            minScale = 0.5;
+        }
+
+        resetView();
+    }
+
+    if (img.complete) {
+        initFitToFrame();
+    } else {
+        img.onload = initFitToFrame;
+    }
+})();
+</script>
+
+
