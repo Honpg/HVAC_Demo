@@ -15,6 +15,14 @@ sys.path.insert(0, BASE_PATH)
 HISTORY_DIR = os.path.join(BASE_PATH, "history")
 HISTORY_FILE = os.path.join(HISTORY_DIR, "history.json")
 
+# ===== START UVICORN IN BACKGROUND =====
+from backend.startup import ensure_uvicorn_running
+try:
+    ensure_uvicorn_running(host="127.0.0.1", port=8000, reload=False)
+except Exception as e:
+    print(f"⚠️ Warning: Could not start Uvicorn background server: {e}")
+# ====== END UVICORN STARTUP ======
+
 import streamlit as st
 try:
     from streamlit import st_autorefresh
