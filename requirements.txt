@@ -27,15 +27,13 @@ sympy==1.14.0
 networkx==3.3
 
 # ===================== ML / RL =====================
-torch==2.7.1+cu118
-torchvision==0.22.1+cu118
-torchaudio==2.7.1+cu118
+torch==2.7.1
+torchvision==0.22.1
+torchaudio==2.7.1
 filelock==3.19.1
 fsspec==2025.9.0
 
 # ===================== FMU / MODELICA =====================
-# ⚠️ CÁC GÓI DƯỚI NÀY PHẢI CÀI BẰNG CONDA (KHÔNG PIP)
-conda install -c conda-forge pyfmi assimulo fmilib sundials suitesparse
 pyfmi==2.19.0
 assimulo==3.7.2
 fmilib==3.0.4
