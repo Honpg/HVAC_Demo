@@ -1,8 +1,6 @@
-fastapi==0.115.6
-uvicorn==0.32.1
-starlette==0.41.3
-numpy==1.16
 streamlit==1.41.1
+
+numpy==1.26.4
 pandas==2.2.3
 scipy==1.14.1
 matplotlib==3.9.2
@@ -11,6 +9,10 @@ plotly==5.24.1
 requests==2.32.3
 pydantic==2.10.3
 typing_extensions==4.12.2
-Pillow==11.0.0
 
-PyFMI==2.4
+# nếu bạn cần chạy API local/VM thì giữ, còn Cloud chỉ streamlit thì có thể bỏ
+fastapi==0.115.6
+uvicorn==0.32.1
+starlette==0.41.3
+
+Pillow==11.0.0
