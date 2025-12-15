@@ -5,6 +5,7 @@ HVAC + RL Demo - Main Application
 
 import sys
 import os
+import time
 from typing import Dict
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,13 +60,13 @@ DEFAULT_ACTIONS = {
     "uFanEA": 0.50,
 }
 
-REGION_OPTIONS = ["DN", "HN", "SG"]
+REGION_OPTIONS = ["DaNang", "HaNoi", "SaiGon"]
 
 
 def ensure_session_state():
     # Region first so các state phía dưới dùng đúng vùng
     if "region" not in st.session_state:
-        st.session_state.region = "DN"
+        st.session_state.region = "DaNang"
     if "initial_baseline" not in st.session_state:
         # Warmup baseline IAQ/Action tại giờ hiện tại; lỗi => dict rỗng
         current_hour = datetime.now(SIM_TZ).hour
@@ -84,14 +85,13 @@ def ensure_session_state():
 
 def ensure_baseline_for_region(region: str):
     """Rebuild initial baseline when region changes."""
-    region_key = region.upper() if isinstance(region, str) else "DN"
-    if st.session_state.get("initial_baseline_region") != region_key:
+    if st.session_state.get("initial_baseline_region") != region:
         current_hour = datetime.now(SIM_TZ).hour
         st.session_state.initial_baseline = get_initial_baseline(
             target_hour=current_hour,
-            region=region_key,
+            region=region,
         )
-        st.session_state.initial_baseline_region = region_key
+        st.session_state.initial_baseline_region = region
         # Clear realtime cache để tránh lẫn vùng
         st.session_state.realtime_prediction = None
         st.session_state.realtime_weather = None
@@ -204,6 +204,9 @@ def main():
                         # Predict
                         prediction_result = predict_single_point(weather_data, region=region)
                         st.session_state.realtime_prediction = prediction_result
+                        
+                        # Delay 30s
+                        # time.sleep(30)
                         
                         # Save to history
                         ts_now = datetime.now().isoformat()
@@ -334,17 +337,17 @@ def render_realtime_prediction_tab():
     """Render Details Control (visual-only: Weather + Prediction results + charts)."""
     # Section options
     section_options = [
-        "🌤️ Real Time Weather",
-        "📊 Real Time DRL Control",
-        "📈 Visulize Control Chart - New IAQ",
-        "📈 Visulize Control Chart - New Action"
+        "🌤️ Real Time Weather Out Zone",
+        "📊 Real Time DRL Control In Zone",
+        "📈 Visulize Control Chart - New IAQ In Zone",
+        "📈 Visulize Control Chart - New Action In Zone"
     ]
     
     # Multiselect để chọn sections muốn hiển thị
     selected_sections = st.multiselect(
         "Select sections to display:",
         options=section_options,
-        default=["🌤️ Real Time Weather"],  # Mặc định chỉ chọn Real Time Weather
+        default=["🌤️ Real Time Weather Out Zone"],  # Mặc định chỉ chọn Real Time Weather
         key="details_control_sections"
     )
     
@@ -353,8 +356,8 @@ def render_realtime_prediction_tab():
         return
     
     # Render Real Time Weather
-    if "🌤️ Real Time Weather" in selected_sections:
-        st.markdown("#### 🌤️ Real Time Weather")
+    if "🌤️ Real Time Weather Out Zone" in selected_sections:
+        st.markdown("#### 🌤️ Real Time Weather Out Zone")
         if st.session_state.realtime_weather:
             weather = st.session_state.realtime_weather
             col1, col2, col3, col4 = st.columns(4)
@@ -377,8 +380,8 @@ def render_realtime_prediction_tab():
         st.markdown("---")
     
     # Render Real Time DRL Control
-    if "📊 Real Time DRL Control" in selected_sections:
-        st.markdown("#### 📊 Real Time DRL Control")
+    if "📊 Real Time DRL Control In Zone" in selected_sections:
+        st.markdown("#### 📊 Real Time DRL Control In Zone")
         if st.session_state.realtime_prediction:
             pred = st.session_state.realtime_prediction
             fmu = pred.get("fmu_state", {}).get("fmu_outputs", {})
@@ -390,7 +393,7 @@ def render_realtime_prediction_tab():
 
             # Initial IAQ snapshot
             initial_iaq = pred.get("initial", {}).get("iaq", {})
-            st.markdown("**Initial IAQ:**")
+            st.markdown("**Initial IAQ In Zone:**")
             initial_iaq_snapshot = {
                 "Temp (°C)": initial_iaq.get("T_zone", 25.0),
                 "RH (%)": initial_iaq.get("RH_zone", 50.0),
@@ -404,7 +407,7 @@ def render_realtime_prediction_tab():
 
             # Initial Action values
             initial_action = pred.get("initial", {}).get("action_init", {})
-            st.markdown("**Initial Action:**")
+            st.markdown("**Initial Action In Zone:**")
             initial_act_cols = st.columns(5)
             for i, name in enumerate(["uFan", "uOA", "uChiller", "uHeater", "uFanEA"]):
                 with initial_act_cols[i]:
@@ -420,14 +423,14 @@ def render_realtime_prediction_tab():
                 "CO₂ (ppm)": fmu.get("CO2_zone_ppm", 500),
                 "Power (kW)": fmu.get("P_total_W", 0.0) / 1000.0,
             }
-            st.markdown("**New IAQ (With RL Control):**")
+            st.markdown("**New IAQ (In Zone With DRL Control):**")
             iaq_cols = st.columns(4)
             for i, (lbl, val) in enumerate(new_iaq_snapshot.items()):
                 with iaq_cols[i]:
                     st.metric(lbl, f"{val:.2f}")
 
             # New Action values
-            st.markdown("**New Action:**")
+            st.markdown("**New Action(In Zone With DRL):**")
             action_dict = pred.get("action_dict", {})
             act_cols = st.columns(5)
             for i, name in enumerate(["uFan", "uOA", "uChiller", "uHeater", "uFanEA"]):
@@ -440,11 +443,11 @@ def render_realtime_prediction_tab():
             st.markdown("---")
     
     # Visualize Control Chart: New IAQ
-    if "📈 Visulize Control Chart - New IAQ" in selected_sections:
+    if "📈 Visulize Control Chart - New IAQ In Zone" in selected_sections:
         history_all = st.session_state[HISTORY_KEY]
         history = [h for h in history_all if h.get("region", "DN") == st.session_state.region]
         if history:
-            st.markdown(f"#### 📈 Visulize Control Chart - New IAQ (Region: {st.session_state.region})")
+            st.markdown(f"#### 📈 Visulize Control Chart - New IAQ In Zone (Region: {st.session_state.region})")
             # IAQ chart
             times = [h.get("timestamp") for h in history]
             fmu_list = [h.get("fmu_state", {}).get("fmu_outputs", {}) for h in history]
@@ -461,14 +464,21 @@ def render_realtime_prediction_tab():
                 "CO₂ (ppm)": "#22c55e",
                 "Power (kW)": "#a855f7",
             }
+            # Màu nhạt hơn cho đường nét đứt
+            faded_colors = {
+                "Temp (°C)": "#fca5a5",
+                "RH (%)": "#7dd3fc",
+                "CO₂ (ppm)": "#86efac",
+                "Power (kW)": "#e9d5ff",
+            }
             for name, vals in iaq_series.items():
                 iaq_fig.add_trace(go.Scatter(
                     x=times,
                     y=vals,
                     name=name,
                     mode="lines+markers",
-                    line=dict(color=colors.get(name, "#000"), width=2),
-                    marker=dict(size=6, color=colors.get(name, "#000"))
+                    line=dict(color=faded_colors.get(name, "#ccc"), width=2, dash="dash"),
+                    marker=dict(size=5, color=faded_colors.get(name, "#ccc"))
                 ))
             iaq_fig.update_layout(
                 height=360,
@@ -485,11 +495,11 @@ def render_realtime_prediction_tab():
             st.markdown('<div class="chart-divider"></div>', unsafe_allow_html=True)
     
     # Visualize Control Chart: New Action
-    if "📈 Visulize Control Chart - New Action" in selected_sections:
+    if "📈 Visulize Control Chart - New Action In Zone" in selected_sections:
         history_all = st.session_state[HISTORY_KEY]
         history = [h for h in history_all if h.get("region", "DN") == st.session_state.region]
         if history:
-            st.markdown(f"#### 📈 Visulize Control Chart - New Action (Region: {st.session_state.region})")
+            st.markdown(f"#### 📈 Visulize Control Chart - New Action In Zone (Region: {st.session_state.region})")
             # Action chart
             times = [h.get("timestamp") for h in history]
             action_names = ["uFan", "uOA", "uChiller", "uHeater", "uFanEA"]
@@ -501,6 +511,14 @@ def render_realtime_prediction_tab():
                 "uHeater": "#f43f5e",
                 "uFanEA": "#64748b"
             }
+            # Màu nhạt hơn cho đường nét đứt
+            faded_action_colors = {
+                "uFan": "#bfdbfe",
+                "uOA": "#a5f3fc",
+                "uChiller": "#ddd6fe",
+                "uHeater": "#fbcfe8",
+                "uFanEA": "#cbd5e1"
+            }
             for name in action_names:
                 vals = []
                 for entry in history:
@@ -510,8 +528,8 @@ def render_realtime_prediction_tab():
                     y=vals,
                     name=name,
                     mode="lines+markers",
-                    line=dict(color=action_colors.get(name, "#000"), width=2),
-                    marker=dict(size=6, color=action_colors.get(name, "#000"))
+                    line=dict(color=faded_action_colors.get(name, "#ccc"), width=2, dash="dash"),
+                    marker=dict(size=5, color=faded_action_colors.get(name, "#ccc"))
                 ))
             action_fig.update_layout(
                 height=360,

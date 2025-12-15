@@ -1,7 +1,7 @@
 """
 WeatherAPI.com Integration
 ==========================
-Lấy real-time weather data từ WeatherAPI.com cho Đà Nẵng, Vietnam.
+Lấy real-time weather data từ WeatherAPI.com cho các vùng: DaNang, HaNoi, SaiGon.
 """
 
 import requests
@@ -19,17 +19,17 @@ WEATHER_API_URL = "http://api.weatherapi.com/v1/current.json"
 
 # Region configs (lat/lon/name) for realtime
 REGION_CONFIG = {
-    "DN": {
+    "DaNang": {
         "lat": 15.97988,
         "lon": 108.23858,
         "location": "HVAC Company - Hoa Xuan, Cam Le, Da Nang",
     },
-    "HN": {
+    "HaNoi": {
         "lat": 21.04062,
         "lon": 105.74189,
         "location": "HVAC Vietnam Co., Xuan Phuong, Nam Tu Liem, Hanoi",
     },
-    "SG": {
+    "SaiGon": {
         "lat": 10.82547,
         "lon": 106.62809,
         "location": "HVAC Sai Gon, Tan Binh, Ho Chi Minh City",
@@ -37,15 +37,15 @@ REGION_CONFIG = {
 }
 
 
-def get_realtime_weather(region: str = "DN") -> Dict[str, Any]:
+def get_realtime_weather(region: str = "DaNang") -> Dict[str, Any]:
     """
-    Lấy real-time weather data từ WeatherAPI.com cho Đà Nẵng.
+    Lấy real-time weather data từ WeatherAPI.com cho các vùng DaNang, HaNoi, SaiGon.
     
     Returns:
         Dictionary chứa weather data đã parse:
         {
             "source": "WeatherAPI.com",
-            "location": "Da Nang, Vietnam",
+            "location": "HVAC Company - Hoa Xuan, Cam Le, DaNang",
             "local_time": "2025-12-07 14:30",
             "temperature_c": 28.5,
             "temperature_k": 301.65,
@@ -62,8 +62,7 @@ def get_realtime_weather(region: str = "DN") -> Dict[str, Any]:
         }
     """
     try:
-        region_key = region.upper() if isinstance(region, str) else "DN"
-        cfg = REGION_CONFIG.get(region_key, REGION_CONFIG["DN"])
+        cfg = REGION_CONFIG.get(region, REGION_CONFIG["DaNang"])
         lat = cfg["lat"]
         lon = cfg["lon"]
         friendly_loc = cfg["location"]
@@ -116,7 +115,7 @@ def get_realtime_weather(region: str = "DN") -> Dict[str, Any]:
         
         result = {
             "source": "WeatherAPI.com",
-            "region": region_key,
+            "region": region,
             "location": friendly_loc,
             "local_time": local_time_str,
             "temperature_c": round(temp_c, 2),
@@ -192,11 +191,6 @@ def replace_weather_in_csv(
         target_hour: Giờ cần replace (0-23) - dùng rounded_hour
         base_csv_path: File weather gốc làm chuẩn (mặc định dùng WARMUP_WEATHER_CSV)
     """
-    if base_csv_path is None:
-        # Dùng weather_data1.csv làm base
-        import os
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        base_csv_path = os.path.join(BASE_DIR, "weather_data1.csv")
     
     df_base = pd.read_csv(base_csv_path).sort_values("time").reset_index(drop=True)
     
@@ -248,16 +242,28 @@ def replace_weather_in_csv(
     df_rt.loc[closest_idx, "winDir"] = csv_weather["winDir"]
     # Giữ nguyên HGloHor, HDifHor
     
-    # Ghi đè file realtime
-    df_rt.to_csv(csv_path, index=False)
+    # CUT CSV: Chỉ giữ dữ liệu tới target_hour (không giữ dữ liệu "tương lai")
+    # Target time tuyệt đối trong ngày append
+    target_time_absolute = appended_start_time + target_hour * 3600
+    
+    # Cắt: base + appended day với time <= target_time_absolute
+    base_max_time = float(df_base['time'].max())
+    base_part = df_rt[df_rt['time'] <= base_max_time + 1e-6]
+    appended_part_cut = df_rt[(df_rt['time'] > base_max_time + 1e-6) & (df_rt['time'] <= target_time_absolute)]
+    
+    df_rt_cut = pd.concat([base_part, appended_part_cut], ignore_index=True)
+    
+    # Ghi đè file realtime (đã cắt)
+    df_rt_cut.to_csv(csv_path, index=False)
     
     actual_hour = weather_data.get("current_hour", 0)
     actual_minute = weather_data.get("current_minute", 0)
     rounded_hour = weather_data.get("rounded_hour", actual_hour)
     
-    print(f"✓ Built realtime CSV (appended new day) at {csv_path}")
+    print(f"✓ Built realtime CSV at {csv_path}")
     print(f"  Replace hour {rounded_hour} → time={target_time_seconds}s on appended day")
-    print(f"  Appended day starts at: {appended_start_time}s")
+    print(f"  Cut CSV to time={target_time_absolute}s ({rounded_hour}:00)")
+    print(f"  Rows: {len(df_rt)} → {len(df_rt_cut)} (base: {len(base_part)}, appended: {len(appended_part_cut)})")
     print(f"  Actual time: {actual_hour:02d}:{actual_minute:02d} → Rounded: {rounded_hour:02d}:00")
 
 

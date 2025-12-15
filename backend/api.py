@@ -37,7 +37,7 @@ app.add_middleware(
 
 
 @app.get("/api/health", response_model=Dict[str, Any])
-def health_check(region: str = "DN"):
+def health_check(region: str = "DaNang"):
     """Health check endpoint"""
     try:
         cfg = get_region_config(region)
@@ -51,7 +51,7 @@ def health_check(region: str = "DN"):
                 "fmu_loaded": os.path.exists(FMU_PATH),
                 "rl_model_loaded": os.path.exists(model_path),
                 "model_path": model_path,
-                "region": region.upper(),
+                "region": region,
             }
         }
     except Exception as e:
@@ -59,7 +59,7 @@ def health_check(region: str = "DN"):
 
 
 @app.get("/api/weather-only", response_model=Dict[str, Any])
-def weather_only(region: str = "DN"):
+def weather_only(region: str = "DaNang"):
     """Chỉ lấy weather data từ API, không predict"""
     try:
         weather = get_realtime_weather(region)
@@ -76,7 +76,7 @@ def weather_only(region: str = "DN"):
 
 
 @app.post("/api/predict-realtime-sync", response_model=Dict[str, Any])
-def predict_realtime_sync(region: str = "DN"):
+def predict_realtime_sync(region: str = "DaNang"):
     """
     Main endpoint: Predict real-time với weather từ WeatherAPI.com
     

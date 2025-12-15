@@ -154,7 +154,7 @@ def render_system_panel(
       {simulation_meta_html}
       <div>
         <div style="font-size:0.8rem; font-weight:600; color:#7C8AA5; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">
-        Initial IAQ
+        Initial IAQ In Zone
         </div>
         <div class="metric-grid">
           <div class="metric-item">
@@ -181,7 +181,7 @@ def render_system_panel(
       else f'''
       <div>
         <div style="font-size:0.8rem; font-weight:600; color:#1F2933; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">
-          New IAQ (With RL Control)
+          New IAQ (In Zone With DRL Control)
         </div>
         <div class="metric-grid">
           <div class="metric-item">

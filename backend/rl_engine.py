@@ -25,26 +25,26 @@ FMU_DIR = os.path.join(BASE_DIR, "setup", "env__FMU")
 MODEL_DIR = os.path.join(BASE_DIR, "setup", "model")
 WEATHER_DIR = os.path.join(BASE_DIR, "setup", "weartherdata")
 
-FMU_PATH = os.path.join(FMU_DIR, "AHU_FMU_Core_WeatherInput.fmu")
-
+# FMU_PATH = os.path.join(FMU_DIR, "AHU_FMU_Core_WeatherInput.fmu")
+FMU_PATH = os.path.join(FMU_DIR, "HVAC.fmu")
 # CSV base + realtime per region
 REGION_CONFIG = {
-    # Đà Nẵng - giữ nguyên
-    "DN": {
+    # Đà Nẵng
+    "DaNang": {
         "model": os.path.join(MODEL_DIR, "DDPG_DN.pth"),
         "base_csv": os.path.join(WEATHER_DIR, "weather_data_DN.csv"),
         "realtime_csv": os.path.join(WEATHER_DIR, "weather_data_realtime_DN.csv"),
     },
-    # Hà Nội (HN) dùng model hot + file Ha_Dong, realtime HN
-    "HN": {
-        "model": os.path.join(MODEL_DIR, "best_model_HN_hot.pth"),
-        "base_csv": os.path.join(WEATHER_DIR, "Ha_Dong_weather_data_test_M07_M08.csv"),
+    # Hà Nội - dùng model hot + file Ha_Dong
+    "HaNoi": {
+        "model": os.path.join(MODEL_DIR, "best_model_HN_cold.pth"),
+        "base_csv": os.path.join(WEATHER_DIR, "Ha_Dong_weather_data_test_M03_M04.csv"),
         "realtime_csv": os.path.join(WEATHER_DIR, "weather_data_realtime_HN.csv"),
     },
-    # Sài Gòn (SG) dùng model cold + file Nha Bè, realtime SG
-    "SG": {
+    # Sài Gòn - dùng model cold + file Nha Bè
+    "SaiGon": {
         "model": os.path.join(MODEL_DIR, "best_model_SG_cold.pth"),
-        "base_csv": os.path.join(WEATHER_DIR, "Nha_Be_weather_data_cold_M11_M12.csv"),
+        "base_csv": os.path.join(WEATHER_DIR, "Nha_Be_weather_data_test_M01_M02.csv"),
         "realtime_csv": os.path.join(WEATHER_DIR, "weather_data_realtime_SG.csv"),
     },
 }
@@ -52,25 +52,24 @@ REGION_CONFIG = {
 os.makedirs(WEATHER_DIR, exist_ok=True)
 
 def get_region_config(region: str) -> Dict[str, str]:
-    key = region.upper() if isinstance(region, str) else "DN"
-    return REGION_CONFIG.get(key, REGION_CONFIG["DN"])
+    return REGION_CONFIG.get(region, REGION_CONFIG["DaNang"])
 
 
 # Action warmup:
 # - Baseline (Initial) per-region để dễ tinh chỉnh (SG/HN giống DN mặc định)
 # - Predict dùng bộ chung, có thể tách riêng sau nếu cần.
 BASELINE_WARMUP_ACTIONS = {
-    "DN": [0.45, 0.4, 0.6, 0.45, 0.3, 0.3],
-    "HN": [0.45, 0.4, 0.62, 0.55, 0.3, 0.3],
-    "SG": [0.45, 0.4, 0.61, 0.5, 0.3, 0.3],
+    "DaNang": [0.45, 0.4, 0.8, 0.2, 0.3, 0.3],
+    "HaNoi": [0.45, 0.4, 0.9, 0.3, 0.25, 0.85],
+    "SaiGon": [0.4, 0.45, 0.8, 0.1, 0.3, 0.5],
 }
+
 PREDICT_WARMUP_ACTION = [0.6, 0.5, 0.5, 0.3, 0.3, 0.5]
 
 
 def get_baseline_warmup_action(region: str) -> list:
     """Return region-specific warmup action for Initial baseline."""
-    key = region.upper() if isinstance(region, str) else "DN"
-    return BASELINE_WARMUP_ACTIONS.get(key, BASELINE_WARMUP_ACTIONS["DN"])
+    return BASELINE_WARMUP_ACTIONS.get(region, BASELINE_WARMUP_ACTIONS["DaNang"])
 
 
 # ==================== DDPG NETWORKS ====================
@@ -153,9 +152,11 @@ class HVACEnvironment:
         weather_csv_path: str,
         dt: float = 900.0,
         warmup_weather_path: Optional[str] = None,
+        apply_action_clipping: bool = True,
     ):
         self.dt = dt
         self.fmu_path = fmu_path
+        self.apply_action_clipping = apply_action_clipping
         
     # Load weather data cho phần main (realtime CSV được build mỗi lần predict)
         self.weather_df = pd.read_csv(weather_csv_path)
@@ -295,12 +296,22 @@ class HVACEnvironment:
     
     def step(self, action):
         """Execute one simulation step"""
-        # Mapping action → control theo đúng phạm vi lúc training (ddpg_ver_7.py)
-        uFan = float(np.clip(action[0], 0.1, 0.9))
-        uOA = float(np.clip(action[1], 0.3, 1.0))
-        uChiller = float(np.clip(action[2], 0.0, 1.0))
-        uHeater = float(np.clip(action[3], 0.0, 1.0))
-        uFanEA = float(np.clip(action[4], 0.2, 0.7))
+        # Mapping action → control theo đúng phạm vi lúc training (train.py)
+        # apply_action_clipping=True (NEW phase): clip actions to training ranges
+        # apply_action_clipping=False (INIT phase): use baseline values as-is
+        if self.apply_action_clipping:
+            uFan = float(np.clip(action[0], 0.1, 0.8))
+            uOA = float(np.clip(action[1], 0.3, 0.9))
+            uChiller = float(np.clip(action[2], 0.0, 0.4))
+            uHeater = float(np.clip(action[3], 0.0, 1.0))
+            uFanEA = float(np.clip(action[4], 0.2, 0.7))
+        else:
+            # No clipping - use baseline values directly
+            uFan = float(action[0])
+            uOA = float(action[1])
+            uChiller = float(action[2])
+            uHeater = float(action[3])
+            uFanEA = float(action[4])
         
         self.model.set('uFan', uFan)
         self.model.set('uOA', uOA)
@@ -382,7 +393,7 @@ class HVACEnvironment:
 
 # ==================== REAL-TIME PREDICTION ====================
 
-def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Dict[str, Any]:
+def predict_single_point(weather_data: Dict[str, Any], region: str = "DaNang") -> Dict[str, Any]:
     """
     Predict chỉ 1 điểm tại thời điểm real-time hiện tại.
     
@@ -408,7 +419,8 @@ def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Di
     # Extract rounded hour (đã được làm tròn trong get_realtime_weather)
     rounded_hour = weather_data.get("rounded_hour", weather_data.get("current_hour", 0))
     
-    # Build realtime CSV: append ngày cuối từ weather_data1.csv và replace trong ngày append
+    # Build realtime CSV: append ngày cuối từ weather_data1.csv, replace, và cut tới current hour
+    # (Phần cut đã được xử lý trong replace_weather_in_csv())
     replace_weather_in_csv(
         realtime_csv,
         weather_data,
@@ -483,7 +495,7 @@ def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Di
             0.0,  # T_SA_afterCooling (placeholder)
             0.0,  # RH_SA (placeholder)
             0.0,  # Vdot_SA (placeholder)
-            initial_iaq_from_baseline.get("P_total", 0.0) * 1000.0  # kW to W
+            initial_iaq_from_baseline.get("P_total", 0.0) * 1000.0  # initial_iaq already in kW, convert to W
         ]
         
         # Set initial weather từ dòng đầu ngày append (defensive nếu filter rỗng)
@@ -496,13 +508,13 @@ def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Di
             first_entry_appended = env.weather_df.loc[appended_mask].iloc[0]
         env.prev_weather = [float(first_entry_appended['TDryBul']), float(first_entry_appended['relHum'])]
         
-        # Set initial action từ baseline
+        # Set initial action từ baseline (với clipping nếu fallback)
         env.prev_action = np.array([
-            initial_action_from_baseline.get("uFan", 0.5),
-            initial_action_from_baseline.get("uOA", 0.5),
-            initial_action_from_baseline.get("uChiller", 0.5),
-            initial_action_from_baseline.get("uHeater", 0.0),
-            initial_action_from_baseline.get("uFanEA", 0.5),
+            float(np.clip(initial_action_from_baseline.get("uFan", 0.45), 0.1, 0.8)),
+            float(np.clip(initial_action_from_baseline.get("uOA", 0.4), 0.3, 0.9)),
+            float(np.clip(initial_action_from_baseline.get("uChiller", 0.3), 0.0, 0.3)),
+            float(np.clip(initial_action_from_baseline.get("uHeater", 0.0), 0.0, 1.0)),
+            float(np.clip(initial_action_from_baseline.get("uFanEA", 0.5), 0.2, 0.7)),
         ])
         
         # Get initial state cho ngày append
@@ -524,7 +536,17 @@ def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Di
         fmu_outputs_before = list(env.prev_fmu_outputs) if env.prev_fmu_outputs is not None else []
         
         action = agent.select_action(state_before_action)
-        state_after, done, _ = env.step(action)
+        
+        # Clip actions theo training ranges (phải khớp với step())
+        action_clipped = np.array([
+            float(np.clip(action[0], 0.1, 0.8)),    # uFan
+            float(np.clip(action[1], 0.3, 0.9)),    # uOA
+            float(np.clip(action[2], 0.0, 0.3)),    # uChiller
+            float(np.clip(action[3], 0.0, 1.0)),    # uHeater
+            float(np.clip(action[4], 0.2, 0.7))     # uFanEA
+        ])
+        
+        state_after, done, _ = env.step(action_clipped)
         
         # State trả về dùng BEFORE-action (tránh lệch +15 phút)
         current_state = state_before_action
@@ -534,14 +556,14 @@ def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Di
         fmu_outputs = fmu_outputs_before if fmu_outputs_before else env.prev_fmu_outputs
         
         result = {
-            "action": action.tolist(),
+            "action": action_clipped.tolist(),
             "action_names": ["uFan", "uOA", "uChiller", "uHeater", "uFanEA"],
             "action_dict": {
-                "uFan": float(action[0]),
-                "uOA": float(action[1]),
-                "uChiller": float(action[2]),
-                "uHeater": float(action[3]),
-                "uFanEA": float(action[4])
+                "uFan": float(action_clipped[0]),
+                "uOA": float(action_clipped[1]),
+                "uChiller": float(action_clipped[2]),
+                "uHeater": float(action_clipped[3]),
+                "uFanEA": float(action_clipped[4])
             },
             "fmu_state": {
                 "dimension": 14,
@@ -577,7 +599,7 @@ def predict_single_point(weather_data: Dict[str, Any], region: str = "DN") -> Di
         raise Exception(f"Prediction failed: {str(e)}")
 
 
-def get_initial_baseline(target_hour: int = 0, region: str = "DN") -> Dict[str, Dict[str, float]]:
+def get_initial_baseline(target_hour: int = 0, region: str = "DaNang") -> Dict[str, Dict[str, float]]:
     """
     Lấy Initial IAQ/Action thực từ FMU với weather_data1.csv tại giờ cụ thể.
     Chạy warmup 7 ngày với bộ action riêng cho Initial: [0.45, 0.4, 0.6, 0.45, 0.3, 0.3]
@@ -594,7 +616,8 @@ def get_initial_baseline(target_hour: int = 0, region: str = "DN") -> Dict[str, 
             fmu_path=FMU_PATH,
             weather_csv_path=base_csv,
             warmup_weather_path=base_csv,
-            dt=900.0
+            dt=900.0,
+            apply_action_clipping=False  # INIT phase: no clipping, use baseline values as-is
         )
         # Warmup baseline dùng bộ action riêng
         init_env.warmup_action_override = get_baseline_warmup_action(region)
@@ -614,8 +637,9 @@ def get_initial_baseline(target_hour: int = 0, region: str = "DN") -> Dict[str, 
         # Target time trong ngày đầu tiên sau warmup
         target_time = init_env.main_start + target_hour * 3600
         
-        # Step từ main_start đến target_hour bằng action mặc định (không RL)
-        default_action = np.array([0.45, 0.4, 0.6, 0.35, 0.3])  # Action mặc định cho Initial
+        # Step từ main_start đến target_hour bằng baseline warmup action (không RL)
+        baseline_warmup = get_baseline_warmup_action(region)
+        default_action = np.array(baseline_warmup[:5])  # Lấy 5 phần tử đầu (bỏ occupancy)
         steps_needed = int((target_time - init_env.current_t) / init_env.dt)
         
         for _ in range(max(0, steps_needed)):
@@ -634,7 +658,7 @@ def get_initial_baseline(target_hour: int = 0, region: str = "DN") -> Dict[str, 
                 "P_total": float(fmu_out[7]) / 1000.0
             }
 
-        # Action tại target_hour là action mặc định đã dùng
+        # Action tại target_hour là baseline warmup action đã dùng
         initial_action = {
             "uFan": float(default_action[0]),
             "uOA": float(default_action[1]),

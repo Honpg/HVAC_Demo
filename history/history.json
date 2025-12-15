@@ -1,15 +1,15 @@
 [
   {
-    "time": "20:12",
-    "hour": 20,
-    "timestamp": "2025-12-11 20:12:39",
-    "region": "HN",
+    "time": "15:57",
+    "hour": 15,
+    "timestamp": "2025-12-15 15:57:48",
+    "region": "DaNang",
     "action": [
-      0.9901462197303772,
-      1.5438741396422984e-09,
-      0.44500046968460083,
-      3.883266617776826e-05,
-      0.9841311573982239
+      0.8,
+      0.3,
+      0.3,
+      0.0006150344270281494,
+      0.2
     ],
     "action_names": [
       "uFan",
@@ -19,37 +19,37 @@
       "uFanEA"
     ],
     "action_dict": {
-      "uFan": 0.9901462197303772,
-      "uOA": 1.5438741396422984e-09,
-      "uChiller": 0.44500046968460083,
-      "uHeater": 3.883266617776826e-05,
-      "uFanEA": 0.9841311573982239
+      "uFan": 0.8,
+      "uOA": 0.3,
+      "uChiller": 0.3,
+      "uHeater": 0.0006150344270281494,
+      "uFanEA": 0.2
     },
     "weather": {
-      "temperature_c": 22.2,
-      "humidity_percent": 73.0,
-      "wind_kph": 4.0,
-      "pressure_mb": 1018.0,
-      "location": "HVAC Vietnam Co., Xuan Phuong, Nam Tu Liem, Hanoi",
-      "local_time": "2025-12-11 20:12"
+      "temperature_c": 24.0,
+      "humidity_percent": 78.0,
+      "wind_kph": 13.3,
+      "pressure_mb": 1015.0,
+      "location": "HVAC Company - Hoa Xuan, Cam Le, Da Nang",
+      "local_time": "2025-12-15 15:57"
     },
     "fmu_state": {
       "dimension": 14,
       "values": [
-        301.22635426358886,
-        0.5943636450460184,
-        561.1223193264855,
-        292.44428210741404,
-        292.08591575636694,
-        0.876195897472851,
-        0.18,
-        743.6666763655178,
-        296.925,
-        0.7675,
-        0.7916666666666666,
-        0.8571428571428571,
+        301.1799863793794,
+        0.6702749398889056,
+        690.2002228623209,
+        298.7352652885436,
+        297.5031411156282,
+        0.7022365772005068,
+        0.06,
+        101.35693484322329,
+        297.45,
+        0.8275,
+        0.5833333333333334,
+        0.7142857142857143,
         0.3,
-        0.5801019072532654
+        0.23621180653572083
       ],
       "state_names": [
         "T_zone",
@@ -68,32 +68,614 @@
         "prev_action_avg"
       ],
       "fmu_outputs": {
-        "T_zone_K": 301.22635426358886,
-        "RH_zone_ratio": 0.5943636450460184,
-        "RH_zone_percent": 59.43636450460183,
-        "CO2_zone_ppm": 561.1223193264855,
-        "P_total_W": 743.6666763655178
+        "T_zone_K": 301.1799863793794,
+        "RH_zone_ratio": 0.6702749398889056,
+        "RH_zone_percent": 67.02749398889057,
+        "CO2_zone_ppm": 690.2002228623209,
+        "P_total_W": 101.35693484322329
       }
     },
     "initial": {
       "iaq": {
-        "T_zone": 29.250178875174697,
-        "RH_zone": 69.85312645458498,
-        "CO2_zone": 592.4304024251009,
-        "P_total": 0.899171454287422
+        "T_zone": 24.816726407846772,
+        "RH_zone": 84.31633298941848,
+        "CO2_zone": 592.7740337237491,
+        "P_total": 1.0223015299497007
       },
       "action_init": {
         "uFan": 0.45,
         "uOA": 0.4,
-        "uChiller": 0.6,
-        "uHeater": 0.35,
+        "uChiller": 0.8,
+        "uHeater": 0.2,
         "uFanEA": 0.3
       }
     },
     "processing": {
       "warmup_hours": 0,
-      "process_time_ms": 8303.2,
-      "timestamp_generated": "2025-12-11T20:12:38.955840"
+      "process_time_ms": 7331.92,
+      "timestamp_generated": "2025-12-15T15:57:48.082196"
+    }
+  },
+  {
+    "time": "15:57",
+    "hour": 15,
+    "timestamp": "2025-12-15 15:58:36",
+    "region": "DaNang",
+    "action": [
+      0.8,
+      0.3,
+      0.3,
+      0.0006277747452259064,
+      0.2
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.8,
+      "uOA": 0.3,
+      "uChiller": 0.3,
+      "uHeater": 0.0006277747452259064,
+      "uFanEA": 0.2
+    },
+    "weather": {
+      "temperature_c": 24.0,
+      "humidity_percent": 78.0,
+      "wind_kph": 13.3,
+      "pressure_mb": 1015.0,
+      "location": "HVAC Company - Hoa Xuan, Cam Le, Da Nang",
+      "local_time": "2025-12-15 15:57"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        300.8367590701692,
+        0.6477987470429257,
+        690.2297100218899,
+        298.2781973079535,
+        297.22009127137255,
+        0.6792239490293861,
+        0.06,
+        139.41582776453623,
+        297.45,
+        0.8275,
+        0.5833333333333334,
+        0.7142857142857143,
+        0.3,
+        0.2414446622133255
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 300.8367590701692,
+        "RH_zone_ratio": 0.6477987470429257,
+        "RH_zone_percent": 64.77987470429257,
+        "CO2_zone_ppm": 690.2297100218899,
+        "P_total_W": 139.41582776453623
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 24.816726407846772,
+        "RH_zone": 84.31633298941848,
+        "CO2_zone": 592.7740337237491,
+        "P_total": 1.0223015299497007
+      },
+      "action_init": {
+        "uFan": 0.45,
+        "uOA": 0.4,
+        "uChiller": 0.8,
+        "uHeater": 0.2,
+        "uFanEA": 0.3
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 6084.53,
+      "timestamp_generated": "2025-12-15T15:58:36.457890"
+    }
+  },
+  {
+    "time": "15:57",
+    "hour": 15,
+    "timestamp": "2025-12-15 15:59:06",
+    "region": "DaNang",
+    "action": [
+      0.7007620930671692,
+      0.3,
+      0.3,
+      0.002676898380741477,
+      0.2
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.7007620930671692,
+      "uOA": 0.3,
+      "uChiller": 0.3,
+      "uHeater": 0.002676898380741477,
+      "uFanEA": 0.2
+    },
+    "weather": {
+      "temperature_c": 24.0,
+      "humidity_percent": 78.0,
+      "wind_kph": 13.3,
+      "pressure_mb": 1015.0,
+      "location": "HVAC Company - Hoa Xuan, Cam Le, Da Nang",
+      "local_time": "2025-12-15 15:57"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        300.05990971553143,
+        0.6409417189087673,
+        689.2963284816223,
+        298.6494859166848,
+        296.87337453565493,
+        0.6242976774506815,
+        0.06,
+        269.6970233480155,
+        297.45,
+        0.8275,
+        0.5833333333333334,
+        0.7142857142857143,
+        0.3,
+        0.2299950122833252
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 300.05990971553143,
+        "RH_zone_ratio": 0.6409417189087673,
+        "RH_zone_percent": 64.09417189087672,
+        "CO2_zone_ppm": 689.2963284816223,
+        "P_total_W": 269.6970233480155
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 24.816726407846772,
+        "RH_zone": 84.31633298941848,
+        "CO2_zone": 592.7740337237491,
+        "P_total": 1.0223015299497007
+      },
+      "action_init": {
+        "uFan": 0.45,
+        "uOA": 0.4,
+        "uChiller": 0.8,
+        "uHeater": 0.2,
+        "uFanEA": 0.3
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 5754.08,
+      "timestamp_generated": "2025-12-15T15:59:06.666750"
+    }
+  },
+  {
+    "time": "15:59",
+    "hour": 15,
+    "timestamp": "2025-12-15 16:00:04",
+    "region": "HaNoi",
+    "action": [
+      0.8,
+      0.3,
+      0.3,
+      0.0015813615173101425,
+      0.2
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.8,
+      "uOA": 0.3,
+      "uChiller": 0.3,
+      "uHeater": 0.0015813615173101425,
+      "uFanEA": 0.2
+    },
+    "weather": {
+      "temperature_c": 23.3,
+      "humidity_percent": 53.0,
+      "wind_kph": 11.5,
+      "pressure_mb": 1016.0,
+      "location": "HVAC Vietnam Co., Xuan Phuong, Nam Tu Liem, Hanoi",
+      "local_time": "2025-12-15 15:59"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        300.3390501878065,
+        0.576001201386558,
+        579.2199709886714,
+        302.39120453792333,
+        295.2131020643445,
+        0.42680717802665885,
+        0.16,
+        1639.1923542792736,
+        296.975,
+        0.625,
+        0.5833333333333334,
+        0.7142857142857143,
+        0.3,
+        0.7236005663871765
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 300.3390501878065,
+        "RH_zone_ratio": 0.576001201386558,
+        "RH_zone_percent": 57.6001201386558,
+        "CO2_zone_ppm": 579.2199709886714,
+        "P_total_W": 1639.1923542792736
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 24.77673595133541,
+        "RH_zone": 47.78061921784025,
+        "CO2_zone": 631.5766947688959,
+        "P_total": 1.288225942804073
+      },
+      "action_init": {
+        "uFan": 0.45,
+        "uOA": 0.4,
+        "uChiller": 0.9,
+        "uHeater": 0.3,
+        "uFanEA": 0.25
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 7416.66,
+      "timestamp_generated": "2025-12-15T16:00:04.490188"
+    }
+  },
+  {
+    "time": "16:00",
+    "hour": 16,
+    "timestamp": "2025-12-15 16:00:21",
+    "region": "SaiGon",
+    "action": [
+      0.1,
+      0.7226548790931702,
+      0.3,
+      0.13987557590007782,
+      0.7
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.1,
+      "uOA": 0.7226548790931702,
+      "uChiller": 0.3,
+      "uHeater": 0.13987557590007782,
+      "uFanEA": 0.7
+    },
+    "weather": {
+      "temperature_c": 32.0,
+      "humidity_percent": 56.0,
+      "wind_kph": 3.6,
+      "pressure_mb": 1008.0,
+      "location": "HVAC Sai Gon, Tan Binh, Ho Chi Minh City",
+      "local_time": "2025-12-15 16:00"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        298.7537765828414,
+        0.61775733800128,
+        592.8010984030739,
+        301.07265459609266,
+        298.05299220643275,
+        0.6363543435541776,
+        0.06,
+        408.60365709485006,
+        303.42499999999995,
+        0.635,
+        0.625,
+        0.42857142857142855,
+        0.3,
+        0.5794855952262878
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 298.7537765828414,
+        "RH_zone_ratio": 0.61775733800128,
+        "RH_zone_percent": 61.775733800127995,
+        "CO2_zone_ppm": 592.8010984030739,
+        "P_total_W": 408.60365709485006
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 22.87264582938849,
+        "RH_zone": 62.96117692620786,
+        "CO2_zone": 592.9095356954431,
+        "P_total": 0.6952684886988669
+      },
+      "action_init": {
+        "uFan": 0.4,
+        "uOA": 0.45,
+        "uChiller": 0.8,
+        "uHeater": 0.1,
+        "uFanEA": 0.3
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 5915.02,
+      "timestamp_generated": "2025-12-15T16:00:20.996839"
+    }
+  },
+  {
+    "time": "15:57",
+    "hour": 15,
+    "timestamp": "2025-12-15 16:00:37",
+    "region": "DaNang",
+    "action": [
+      0.8,
+      0.3,
+      0.3,
+      0.0006277747452259064,
+      0.2
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.8,
+      "uOA": 0.3,
+      "uChiller": 0.3,
+      "uHeater": 0.0006277747452259064,
+      "uFanEA": 0.2
+    },
+    "weather": {
+      "temperature_c": 24.0,
+      "humidity_percent": 78.0,
+      "wind_kph": 13.3,
+      "pressure_mb": 1015.0,
+      "location": "HVAC Company - Hoa Xuan, Cam Le, Da Nang",
+      "local_time": "2025-12-15 15:57"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        300.8367590701692,
+        0.6477987470429257,
+        690.2297100218899,
+        298.2781973079535,
+        297.22009127137255,
+        0.6792239490293861,
+        0.06,
+        139.41582776453623,
+        297.45,
+        0.8275,
+        0.5833333333333334,
+        0.7142857142857143,
+        0.3,
+        0.2414446622133255
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 300.8367590701692,
+        "RH_zone_ratio": 0.6477987470429257,
+        "RH_zone_percent": 64.77987470429257,
+        "CO2_zone_ppm": 690.2297100218899,
+        "P_total_W": 139.41582776453623
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 24.816726407846772,
+        "RH_zone": 84.31633298941848,
+        "CO2_zone": 592.7740337237491,
+        "P_total": 1.0223015299497007
+      },
+      "action_init": {
+        "uFan": 0.45,
+        "uOA": 0.4,
+        "uChiller": 0.8,
+        "uHeater": 0.2,
+        "uFanEA": 0.3
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 6192.02,
+      "timestamp_generated": "2025-12-15T16:00:37.339119"
+    }
+  },
+  {
+    "time": "16:09",
+    "hour": 16,
+    "timestamp": "2025-12-15 16:09:20",
+    "region": "DaNang",
+    "action": [
+      0.8,
+      0.3,
+      0.3,
+      0.0014329103287309408,
+      0.2
+    ],
+    "action_names": [
+      "uFan",
+      "uOA",
+      "uChiller",
+      "uHeater",
+      "uFanEA"
+    ],
+    "action_dict": {
+      "uFan": 0.8,
+      "uOA": 0.3,
+      "uChiller": 0.3,
+      "uHeater": 0.0014329103287309408,
+      "uFanEA": 0.2
+    },
+    "weather": {
+      "temperature_c": 24.0,
+      "humidity_percent": 78.0,
+      "wind_kph": 11.9,
+      "pressure_mb": 1015.0,
+      "location": "HVAC Company - Hoa Xuan, Cam Le, Da Nang",
+      "local_time": "2025-12-15 16:09"
+    },
+    "fmu_state": {
+      "dimension": 14,
+      "values": [
+        300.63147399903914,
+        0.6763301860844669,
+        682.7667370903812,
+        296.4529424125023,
+        296.280298091549,
+        0.8055422963413061,
+        0.0983827829360962,
+        194.84025571170432,
+        297.97499999999997,
+        0.8075,
+        0.625,
+        0.7142857142857143,
+        0.3,
+        0.3002600073814392
+      ],
+      "state_names": [
+        "T_zone",
+        "RH_zone",
+        "CO2_zone",
+        "T_SA",
+        "T_SA_afterCooling",
+        "RH_SA",
+        "Vdot_SA",
+        "P_total",
+        "T_out",
+        "relHum",
+        "hour_of_day",
+        "day_of_week",
+        "occupancy",
+        "prev_action_avg"
+      ],
+      "fmu_outputs": {
+        "T_zone_K": 300.63147399903914,
+        "RH_zone_ratio": 0.6763301860844669,
+        "RH_zone_percent": 67.63301860844669,
+        "CO2_zone_ppm": 682.7667370903812,
+        "P_total_W": 194.84025571170432
+      }
+    },
+    "initial": {
+      "iaq": {
+        "T_zone": 24.796896213269633,
+        "RH_zone": 85.7904965517334,
+        "CO2_zone": 592.8460454800806,
+        "P_total": 1.0568060246525748
+      },
+      "action_init": {
+        "uFan": 0.45,
+        "uOA": 0.4,
+        "uChiller": 0.8,
+        "uHeater": 0.2,
+        "uFanEA": 0.3
+      }
+    },
+    "processing": {
+      "warmup_hours": 0,
+      "process_time_ms": 6529.24,
+      "timestamp_generated": "2025-12-15T16:09:20.747777"
     }
   }
 ]
