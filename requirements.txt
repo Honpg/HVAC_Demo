@@ -15,4 +15,4 @@ pydantic==2.10.3
 typing_extensions==4.12.2
 Pillow==11.0.0
 
-pyfmi==2.1
+PyFMI==2.5
