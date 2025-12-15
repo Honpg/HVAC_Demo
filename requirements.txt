@@ -3,8 +3,6 @@ uvicorn==0.32.1
 starlette==0.41.3
 
 streamlit==1.41.1
-
-numpy==1.26.4
 pandas==2.2.3
 scipy==1.14.1
 matplotlib==3.9.2
