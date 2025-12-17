@@ -110,17 +110,17 @@ The Streamlit interface will be available at:
 
 ```
 http://localhost:8501
-
----
+```
 
 ## Remote Access (Optional)
 To expose the Streamlit interface for remote demonstration:
+
 ```
 ngrok http 8501
+
 ```
 Use the generated public URL to access the demo remotely.
 
----
 
 ## Performance Metrics and Evaluation
 
