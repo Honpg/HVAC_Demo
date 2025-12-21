@@ -1,0 +1,147 @@
+# ============================================
+# 🚫 HVAC-DDPG-Control .gitignore
+# ============================================
+
+# ==================== DATA ====================
+# Weather data files (large CSV files)
+data/
+*.csv
+
+# ==================== MODELS & CHECKPOINTS ====================
+# Trained model checkpoints
+checkpoints/
+models/
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.pkl
+*.pickle
+
+# ==================== DEMO ====================
+# Demo folder (contains separate requirements and setup)
+DEMO/
+
+# ==================== FMU FILES ====================
+# FMU binaries (can be regenerated from .mo)
+*.fmu
+# FMU simulation outputs
+*_log.txt
+*_result.mat
+
+# ==================== RESULTS ====================
+# Training and evaluation results
+results/
+
+# ==================== PYTHON ====================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.env
+
+# ==================== JUPYTER NOTEBOOKS ====================
+# Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Notebook output files
+notebooks/*.mat
+notebooks/*.txt
+
+# ==================== IDE & EDITORS ====================
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# ==================== OS FILES ====================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.directory
+
+# ==================== LOGS ====================
+*.log
+logs/
+
+# ==================== MISC ====================
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+
+# History folders
+history/
